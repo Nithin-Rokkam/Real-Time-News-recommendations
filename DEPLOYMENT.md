@@ -15,7 +15,7 @@
    - **Name**: `news-recommender-api`
    - **Environment**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn src.main:app --host 0.0.0.0 --port $PORT`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 5. Click "Create Web Service"
 
 ### 3. Environment Variables
