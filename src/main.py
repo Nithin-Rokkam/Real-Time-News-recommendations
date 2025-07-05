@@ -19,7 +19,13 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev, allow all. For prod, specify allowed origins.
+    allow_origins=[
+        "http://localhost:5173",  # Vite dev server
+        "http://localhost:3000",  # React dev server
+        "https://*.vercel.app",   # Vercel deployments
+        "https://*.onrender.com", # Render deployments
+        "*"  # Allow all for now - you can restrict this later
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
