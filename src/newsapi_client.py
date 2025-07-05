@@ -40,15 +40,18 @@ class NewsAPIClient:
                     if content and len(combined_text) < 200:  # Add content if description is short
                         combined_text += f" {content}"
                     
-                    articles.append({
-                        'title': title,
-                        'description': description,
-                        'content': content,
-                        'url': article.get('url', ''),
-                        'publishedAt': article.get('publishedAt', ''),
-                        'source': article.get('source', {}).get('name', ''),
-                        'combined_text': combined_text.strip()
-                    })
+                    # Only add articles that have some content
+                    if title.strip() and combined_text.strip():
+                        articles.append({
+                            'title': title,
+                            'description': description,
+                            'content': content,
+                            'url': article.get('url', ''),
+                            'publishedAt': article.get('publishedAt', ''),
+                            'source': article.get('source', {}).get('name', ''),
+                            'combined_text': combined_text.strip()
+                        })
+                
                 return articles
             else:
                 print(f"API Error: {data.get('message', 'Unknown error')}")

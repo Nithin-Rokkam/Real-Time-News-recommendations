@@ -36,7 +36,7 @@ news_dict = {row['news_id']: row for _, row in news_df.iterrows()}
 # Pydantic models for request/response
 class SearchRequest(BaseModel):
     query: str
-    top_k: Optional[int] = 5
+    top_k: Optional[int] = 10
     language: Optional[str] = "en"
 
 class RecommendationRequest(BaseModel):
@@ -89,9 +89,11 @@ async def get_recommendations(request: RecommendationRequest):
         if request.include_live:
             # Pick a random page number between 1 and 5
             page = random.randint(1, 5)
+            # Fetch more articles to ensure we have enough for recommendations
+            fetch_size = max(request.top_k * 10, 50)  # Fetch much more to ensure we get enough
             live_articles = news_client.search_articles(
                 query=request.query,
-                page_size=20,  # Fetch more to have better selection
+                page_size=fetch_size,
                 page=page
             )
         else:
@@ -101,7 +103,7 @@ async def get_recommendations(request: RecommendationRequest):
             # Get recommendations from MIND dataset
             mind_recommendations = recommender.find_similar_articles(
                 request.query, 
-                top_k=request.top_k//2
+                top_k=request.top_k
             )
         else:
             mind_recommendations = []
@@ -111,7 +113,7 @@ async def get_recommendations(request: RecommendationRequest):
             live_recommendations = recommender.recommend_from_live_articles(
                 request.query,
                 live_articles,
-                top_k=request.top_k//2
+                top_k=request.top_k
             )
         else:
             live_recommendations = []
