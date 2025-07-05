@@ -6,8 +6,8 @@ import uvicorn
 import pandas as pd
 import random
 
-from newsapi_client import NewsAPIClient
-from recommender import NewsRecommender
+from .newsapi_client import NewsAPIClient
+from .recommender import NewsRecommender
 
 # Initialize FastAPI app
 app = FastAPI(
