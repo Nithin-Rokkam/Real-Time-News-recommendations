@@ -3,12 +3,14 @@ import axios from 'axios';
 import './App.css';
 
 const NEWS_BG_URL = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=900&q=80";
+const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=900&q=80";
 
 function App() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState(DEFAULT_IMAGE_URL);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -23,6 +25,25 @@ function App() {
         include_mind: false
       });
       setResults(response.data);
+      // Fetch Unsplash image based on query
+      try {
+        const unsplashRes = await axios.get(
+          "https://api.unsplash.com/search/photos",
+          {
+            params: { query: query, orientation: "landscape", per_page: 10 },
+            headers: {
+              Authorization: `Client-ID AjnFB-SWxZkKvBEm-ipkW-tJeMCamBk5bMdeyATxSNQ`,
+            },
+          }
+        );
+        if (unsplashRes.data.results && unsplashRes.data.results.length > 0) {
+          setImageUrl(unsplashRes.data.results[0].urls.regular);
+        } else {
+          setImageUrl(DEFAULT_IMAGE_URL); // fallback
+        }
+      } catch (imgErr) {
+        setImageUrl(DEFAULT_IMAGE_URL); // fallback
+      }
     } catch (err) {
       setError('Failed to fetch recommendations. Is the backend running?');
     } finally {
@@ -87,7 +108,7 @@ function App() {
         </div>
       </div>
       <div className="right-panel fill-panel">
-        <img src={NEWS_BG_URL} alt="World news technology background" className="news-bg-img fill-img" />
+        <img src={imageUrl} alt="Related to search" className="news-bg-img fill-img" />
       </div>
     </div>
   );

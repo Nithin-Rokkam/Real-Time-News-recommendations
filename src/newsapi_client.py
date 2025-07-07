@@ -23,7 +23,8 @@ class NewsAPIClient:
         }
         
         try:
-            response = requests.get(url, params=params)
+            headers = {"User-Agent": "Mozilla/5.0"}
+            response = requests.get(url, params=params, headers=headers)
             response.raise_for_status()
             data = response.json()
             
@@ -76,7 +77,8 @@ class NewsAPIClient:
             params['category'] = category
         
         try:
-            response = requests.get(url, params=params)
+            headers = {"User-Agent": "Mozilla/5.0"}
+            response = requests.get(url, params=params, headers=headers)
             response.raise_for_status()
             data = response.json()
             
