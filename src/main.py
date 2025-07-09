@@ -22,8 +22,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # Vite dev server
         "http://localhost:3000",  # React dev server
-        "https://*.vercel.app",   # Vercel deployments
-        "https://*.onrender.com", # Render deployments
+        # "https://*.vercel.app",   # Vercel deployments
+        # "https://*.onrender.com", # Render deployments
         "*"  # Allow all for now - you can restrict this later
     ],
     allow_credentials=True,
