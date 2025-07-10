@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Production stage
 FROM python:3.10-slim
 
-# Set working directory
+# Set working directory 
 WORKDIR /app
 
 # Copy virtual environment from builder stage
